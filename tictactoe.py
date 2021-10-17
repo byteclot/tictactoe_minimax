@@ -202,25 +202,29 @@ def computer_move(level):
             score = -2
         else:
             score = 2
-        move = -1
+        move = []
 
-        for i in range(len(board_cells)):
+        for i in range(len(board_cells) - 1, -1, -1):
             if board_cells[i] == " ":
                 if turn == 'X':
                     board_cells[i] = turn
                     curr_score = minimax(board_cells, False)
                     board_cells[i] = " "
-                    if curr_score > score:
+                    if curr_score >= score:
+                        if curr_score > score:
+                            move.clear()
                         score = curr_score
-                        move = i
+                        move.append(i)
                 else:
                     board_cells[i] = turn
                     curr_score = minimax(board_cells, True)
                     board_cells[i] = " "
-                    if curr_score < score:
+                    if curr_score <= score:
+                        if curr_score < score:
+                            move.clear()
                         score = curr_score
-                        move = i
-        make_move(move)
+                        move.append(i)
+        make_move(move[random.randint(0, len(move) - 1)])
 
 
 def minimax(new_board, is_this_ais_turn):
@@ -232,8 +236,8 @@ def minimax(new_board, is_this_ais_turn):
         return 0
 
     if is_this_ais_turn:
-        score = -2 
-        for i in range(len(new_board)):
+        score = -2
+        for i in range(len(new_board) - 1, -1, -1):
             if new_board[i] == " ":
                 new_board[i] = 'X'
                 curr_score = minimax(new_board, False)
@@ -242,7 +246,7 @@ def minimax(new_board, is_this_ais_turn):
         return score
     else:
         score = 2
-        for i in range(len(new_board)):
+        for i in range(len(new_board) -1, -1, -1):
             if new_board[i] == " ":
                 new_board[i] = 'O'
                 curr_score = minimax(new_board, True)
